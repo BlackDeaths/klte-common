@@ -62,6 +62,11 @@ TARGET_PROCESS_SDK_VERSION_OVERRIDE += \
     /system/vendor/bin/mm-qcamera-daemon=28 \
     /system/vendor/bin/hw/rild=28
 
+# Filesystem
+BOARD_ROOT_EXTRA_FOLDERS := efs firmware firmware-mdm
+BOARD_ROOT_EXTRA_SYMLINKS := /data/tombstones:/tombstones
+TARGET_FS_CONFIG_GEN := $(COMMON_PATH)/config.fs
+
 # Partitions
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
