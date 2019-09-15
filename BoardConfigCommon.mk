@@ -41,12 +41,11 @@ TARGET_EXFAT_DRIVER := sdfat
 DEVICE_MANIFEST_FILE += $(COMMON_PATH)/manifest.xml
 
 # Kernel
+BOARD_DTBTOOL_ARGS := --dt-tag "htc,project-id = <"
+BOARD_KERNEL_CMDLINE := console=none androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x37 ehci-hcd.park=3 zcache.enabled=1 zcache.compressor=lz4 maxcpus=1 zcache
+BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
 BOARD_KERNEL_BASE := 0x00000000
-BOARD_KERNEL_CMDLINE := console=null androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x37 ehci-hcd.park=3 zcache.enabled=1 zcache.compressor=lz4 maxcpus=1 androidboot.selinux=permissive
 BOARD_KERNEL_IMAGE_NAME := zImage
-TARGET_KERNEL_ADDITIONAL_FLAGS := \
-    DTC=$(shell pwd)/prebuilts/misc/$(HOST_OS)-x86/dtc/dtc \
-    MKDTIMG=$(shell pwd)/prebuilts/misc/$(HOST_OS)-x86/libufdt/mkdtimg
 BOARD_KERNEL_PAGESIZE := 2048
 BOARD_KERNEL_SEPARATED_DT := true
 BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x02000000 --tags_offset 0x01e00000
@@ -60,9 +59,9 @@ TARGET_NEEDS_PLATFORM_TEXT_RELOCATIONS := true
 TARGET_LD_SHIM_LIBS += \
     /system/vendor/lib/hw/camera.vendor.msm8974.so|libshim_camera.so
 TARGET_PROCESS_SDK_VERSION_OVERRIDE += \
-    /system/bin/mediaserver=22 \
-    /system/vendor/bin/mm-qcamera-daemon=22 \
-    /system/vendor/bin/hw/rild=27
+    /system/bin/mediaserver=28 \
+    /system/vendor/bin/mm-qcamera-daemon=28 \
+    /system/vendor/bin/hw/rild=28
 
 # Partitions
 BOARD_BOOTIMAGE_PARTITION_SIZE := 13631488
@@ -96,9 +95,6 @@ BOARD_HAS_NO_SELECT_BUTTON := true
 BOARD_RECOVERY_SWIPE := true
 TARGET_RECOVERY_FSTAB := $(COMMON_PATH)/rootdir/etc/fstab.qcom
 
-# SELinux
-#include $(COMMON_PATH)/sepolicy/sepolicy.mk
-
 # Sensors
 TARGET_NO_SENSOR_PERMISSION_CHECK := true
 
@@ -109,6 +105,16 @@ endif
 
 # Use Snapdragon LLVM if available on build server
 TARGET_USE_SDCLANG := true
+
+# SELinux
+#include device/qcom/sepolicy-legacy/sepolicy.mk
+#BOARD_SEPOLICY_DIRS += $(PLATFORM_PATH)/sepolicy
+BOARD_SEPOLICY_DIRS += $(PLATFORM_PATH)/sepolicy/tmp
+
+# Shims
+TARGET_LD_SHIM_LIBS := \
+    /system/vendor/lib/hw/camera.vendor.msm8974.so|libshim_camera.so \
+    /system/vendor/lib/libril-qc-qmi-1.so|libshim_ril.so
 
 # Wifi
 BOARD_HAVE_SAMSUNG_WIFI := true
