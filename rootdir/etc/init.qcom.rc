@@ -827,6 +827,13 @@ on boot
     chmod 0640 /efs/FactoryApp/baro_delta
     restorecon /efs/FactoryApp/baro_delta
 
+service hciattach /vendor/bin/init.qcom.bt.sh
+    class late_start
+    user bluetooth
+    group bluetooth net_bt_admin
+    disabled
+    oneshot
+
     chown system system /efs/gyro_cal_data
     chmod 0640 /efs/gyro_cal_data
     restorecon /efs/gyro_cal_data
